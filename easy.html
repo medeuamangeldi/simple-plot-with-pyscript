@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Function</title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+        - matplotlib
+        - numpy
+    </py-env>
+</head>
+<!-- Use the above code lines in all your codes. Change only the content inside the <py-env> tags by adding your necessary python libraries -->
+
+<!-- The layout html code is written inside the body tag as shown below-->
+<body style="text-align: center; background-color: azure;">
+
+    <!-- h1 tag is the as largest header in latex or python markdown -->
+    <h1 style="border: 1px; margin: 10px; padding: 5px; background-color: rgb(195, 225, 94);">Simple Function Plot: f(x) = A + Be^x</h1>
+
+    <!-- If you are unsure about styling like "border, margin, padding etc. please google search and read. They are easy to understand"-->
+    <div style="border: 1px; margin: 10px; padding: 5px; background-color: rgb(212, 241, 237);">
+
+        <label for="a">Coefficient A</label> <!--label tag is used to show the name of the input-->
+        <input id="a" type="number" style="text-align: center;" placeholder="" value="2"> <!--input tag is for input field. I chose type="number" as I need only the numbers. There are other types like email, password, text etc.-->
+
+        <br> <!--line breaks-->
+
+        <label for="b" >Coefficient B</label>
+        <input id="b" type="number" style="text-align: center; margin-top: 2%;" placeholder="" value="2">
+
+        <br>
+
+        <label for="i" >x min</label>
+        <input id="i" type="number" style="text-align: center; margin-top: 2%;" placeholder="" value="0">
+
+        <label for="j" >x max</label>
+        <input id="j" type="number" style="text-align: center; margin-top: 2%;" placeholder="" value="100">
+
+        <br>
+        <br>
+
+        <!--button tag. for type use button, pys-onClick is the name of the python function.-->
+        <button id="compute" type="button" pys-onClick="run" style="background-color: white;">Compute</button>
+
+    </div>
+    <!--below div tag is the location of the output figure. id is important as you will use it in the python code to indicate where to show the result.-->
+    <div id="mpl" style="width: 500px; height: 500px; margin: 0 auto;"></div>
+    <py-script>
+
+#import python libraries: matplotlib.pyplot for plots, numpy for working with arrays.
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+#create variable called "output" or any name that is linked with the div tag "mpl"(line 50) to use it in the python function to plot
+
+output = Element('mpl')
+
+#define the figure with name "fig" or any other name. 8 8 is the figure size
+fig = plt.figure(figsize=(8,8))
+#only 1 subplot is used
+ax = fig.add_subplot(111)
+
+# define the title of the figure
+ax.set_title('$f(x) = A + Be^x$')
+
+def run(*args, **kwargs):
+    #link input field (line 27) with the variable a. then convert the string to float (to indicate it is a number not jsut text)
+    a = Element('a')
+    a = float(a.value)
+
+    b = Element('b')
+    b = float(b.value)
+
+    i = Element('i')
+    i = float(i.value)
+
+    j = Element('j')
+    j = float(j.value)
+    
+    #define the domain x from i to j with 2000 points.
+    x = np.linspace(i, j, 2000)
+
+    #define the range
+    y = a + b*np.exp(x)
+    
+    #plot it
+    ax.plot(x, y, label='A='+str(a) +', ' + 'B='+str(b))
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$y$')
+    ax.legend(loc='best')
+
+    #show the output in the div "mpl" (line 50)
+    output.write(fig)
+    </py-script>
+</body>
+</html>
